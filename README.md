@@ -1,36 +1,21 @@
-# SaveTrace-Bot
-📦「存迹 」一个Telegram Bot，用于保存 Telegram 中的限制转发内容。
-# 🗂️ 存迹 Bot（SaveTrace Bot）
-
+# 🗂️「存迹」（SaveTrace-Bot）
 <p align="center">
-
 <img src="https://img.shields.io/badge/Python-3.10-blue?logo=python" />
 <img src="https://img.shields.io/badge/Pyrogram-2.0-orange?logo=telegram" />
 <img src="https://img.shields.io/badge/Docker-Supported-2496ED?logo=docker" />
 <img src="https://img.shields.io/badge/Telegram-Bot-26A5E4?logo=telegram" />
-
 </p>
-
 <p align="center">
-
-<b>一个 Telegram 内容保存与转发机器人</b>
-
+<b>一个Telegram Bot，用于保存 Telegram 中的限制转发内容。</b>
 <br>
-
 支持公开频道、私有频道、机器人消息、媒体文件以及 Telegram 相册（Media Group）获取。
-
 </p>
-
 ---
-
 # ✨ 项目介绍
 
-**存迹 Bot（SaveTrace Bot）** 是一个基于 **Python + Pyrogram** 开发的 Telegram 内容处理机器人。
-
+**「存迹」（SaveTrace-Bot）** 是一个基于 **Python + Pyrogram** 开发的 Telegram 内容处理机器人。
 它可以帮助用户通过 Telegram 消息链接获取内容，并自动转发到当前聊天。
-
 支持：
-
 * 🌍 公开频道内容获取
 * 🔒 私有频道内容获取
 * 🤖 Bot Chat 消息获取
@@ -42,19 +27,13 @@
 * 📦 Telegram 相册完整转发
 * 👥 用户授权管理
 * 🐳 Docker Compose 部署
-
 ---
-
 # 📸 功能展示
-
 ## 🚀 简单使用
-
 发送 Telegram 消息链接：
-
 ```
 https://t.me/channel/1234
 ```
-
 机器人自动获取对应内容。
 
 ---
