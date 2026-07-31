@@ -1,0 +1,13 @@
+services:
+
+  savetrace-bot:
+    build: .
+    container_name: savetrace-bot
+    restart: always
+
+    volumes:
+      - ./:/app
+
+    environment:
+      - TZ=Asia/Shanghai
+

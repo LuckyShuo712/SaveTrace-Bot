@@ -4,5 +4,8 @@
     "HASH": "YOUR_API_HASH",
     "STRING": "YOUR_STRING_SESSION",
     "OWNER": 123456789,
-    "USERS": []
+    "USERS": [
+        123456789,
+        987654321
+    ]
 }

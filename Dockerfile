@@ -1,8 +1,11 @@
-FROM python:3.9
+FROM python:3.10-slim
+
 WORKDIR /app
 
-COPY requirements.txt /app/
-RUN pip3 install -r requirements.txt
+COPY requirements.txt .
 
-COPY . /app
-CMD flask run -h 0.0.0.0 -p 10000 & python3 main.py
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+CMD ["python3", "main.py"]
