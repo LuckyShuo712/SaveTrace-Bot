@@ -10,7 +10,7 @@
 <b>一个Telegram Bot，用于保存 Telegram 中的限制转发内容。</b>
 <br>
 支持公开频道、私有频道、机器人消息、媒体文件获取。<br>
-基于 <a href="https://github.com/bipinkrish/Save-Restricted-Bot">Save-Restricted-Bot</a> 进行改进
+基于 <a href="https://github.com/bipinkrish/Save-Restricted-Bot">Save-Restricted-Bot</a> 改进
 </p>
 
 ---
