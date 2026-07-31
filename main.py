@@ -698,7 +698,7 @@ def add_user(client, message):
     save_config()
     bot.send_message(
         message.chat.id,
-        f"✅ 添加成功\n\n用户ID:\n`{user_id}`"
+        f"✅ 添加成功\n用户ID:\n`{user_id}`"
     )
 
 # ==========================
@@ -727,7 +727,7 @@ def del_user(client, message):
     save_config()
     bot.send_message(
         message.chat.id,
-        f"✅ 删除成功\n\n用户ID:\n`{user_id}`"
+        f"✅ 删除成功\n用户ID:\n`{user_id}`"
     )
 
 # ==========================
@@ -889,7 +889,7 @@ def approve_handler(client, callback_query):
 """
         )
         callback_query.message.edit_text(
-            "✅ 已授权用户\n\n"
+            "✅ 已授权用户\n"
             f"ID: `{user_id}`"
         )
         
