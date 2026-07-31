@@ -1,0 +1,8 @@
+{
+    "TOKEN": "YOUR_BOT_TOKEN",
+    "ID": YOUR_API_ID,
+    "HASH": "YOUR_API_HASH",
+    "STRING": "YOUR_STRING_SESSION",
+    "OWNER": 123456789,
+    "USERS": []
+}
