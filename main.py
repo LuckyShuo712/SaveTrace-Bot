@@ -85,6 +85,12 @@ bot = Client(
     bot_token=BOT_TOKEN,
 )
 
+# ==========================
+# Progress Cache
+# ==========================
+
+progress_data = {}
+
 if STRING_SESSION:
 
     acc = Client(
@@ -140,14 +146,124 @@ def upstatus(status_file, message):
         except Exception:
             time.sleep(5)
 
-def progress(current, total, message, status_type):
-    with open(
-        f"{message.id}{status_type}status.txt",
-        "w",
-    ) as f:
-        f.write(
-            f"{current * 100 / total:.1f}%"
+# ==========================
+# Progress Display
+# ==========================
+
+
+def format_size(size):
+
+    if size < 1024 * 1024:
+        return f"{size / 1024:.2f} KB"
+
+    if size < 1024 * 1024 * 1024:
+        return f"{size / 1024 / 1024:.2f} MB"
+
+    return f"{size / 1024 / 1024 / 1024:.2f} GB"
+
+
+
+def progress(
+    current,
+    total,
+    message,
+    status_message,
+    action="下载"
+):
+
+    try:
+        now = time.time()
+        key = status_message.id
+
+        # 第一次记录
+        if key not in progress_data:
+            progress_data[key] = {
+                "start": now,
+                "last": now,
+                "current": current
+            }
+
+        data = progress_data[key]
+
+        # 每3秒更新一次
+        if now - data["last"] < 3:
+            return
+
+        elapsed = now - data["start"]
+
+        if elapsed <= 0:
+            return
+
+        # 速度
+        speed = current / elapsed
+
+        # 剩余时间
+        remaining = 0
+        if speed > 0:
+            remaining = (
+                total - current
+            ) / speed
+        percentage = (
+            current * 100 / total
         )
+
+        # 进度条
+        length = 10
+        filled = int(
+            percentage / 100 * length
+        )
+
+        bar = (
+            "█" * filled
+            +
+            "░" * (length-filled)
+        )
+
+        # 秒转分钟
+        if remaining < 60:
+            eta = (
+                f"{int(remaining)} 秒"
+            )
+
+        else:
+
+            eta = (
+                f"{int(remaining//60)} 分"
+                f"{int(remaining%60)} 秒"
+            )
+
+        text = (
+
+            f"{'📥' if action=='下载' else '📤'} "
+            f"**{action}中**\n\n"
+
+            f"{bar} "
+            f"{percentage:.1f}%\n\n"
+
+            f"📦 "
+            f"{format_size(current)}"
+            f" / "
+            f"{format_size(total)}\n\n"
+
+            f"⚡ "
+            f"{format_size(speed)}/s\n\n"
+
+            f"⏳ "
+            f"剩余 {eta}"
+
+        )
+
+        bot.edit_message_text(
+            message.chat.id,
+            status_message.id,
+            text
+        )
+
+        data["last"] = now
+
+    except Exception as e:
+
+        pass
 
 
 # ==========================
@@ -206,11 +322,11 @@ def send_start(client, message):
             [
                 [
                     InlineKeyboardButton(
-                        "💻 「存迹」代码",
+                        "💻 「存迹」",
                         url=(
                             "https://github.com/"
-                            "fzucs/"
-                            "Save-Restricted-Bot"
+                            "LuckyShuo712/"
+                            "SaveTrace-Bot"
                         ),
                     )
                 ]
@@ -463,7 +579,8 @@ def handle_private(
             progress=progress,
             progress_args=[
                 message,
-                "down",
+                status,
+                "下载",
             ],
         )
 
@@ -477,6 +594,7 @@ def handle_private(
                 reply_to_message_id=message.id,
             )
 
+
         elif msg_type == "Video":
 
             bot.send_video(
@@ -487,6 +605,12 @@ def handle_private(
                 height=msg.video.height,
                 caption=msg.caption,
                 caption_entities=msg.caption_entities,
+                progress=progress,
+                progress_args=[
+                    message,
+                    status,
+                    "上传",
+                ],
                 reply_to_message_id=message.id,
             )
 
@@ -506,7 +630,13 @@ def handle_private(
                 message.chat.id,
                 download_file,
                 caption=msg.caption,
-                caption_entities=msg.caption_entities,
+                caption_entities=msg.caption_entities, 
+                progress=progress,
+                progress_args=[
+                    message,
+                    status,
+                    "上传",
+                ],           
                 reply_to_message_id=message.id,
             )
 
@@ -535,6 +665,9 @@ def handle_private(
                 reply_to_message_id=message.id,
             )
 
+        if status.id in progress_data:
+            del progress_data[status.id]
+            
         bot.delete_messages(
             message.chat.id,
             status.id,
@@ -739,7 +872,7 @@ def list_users(client, message):
     print("users command loaded")
     if not is_owner(message):
         return
-    text = "👥 授权用户：\n\n"
+    text = "👥 授权用户：\n"
     for user in ALLOWED_USERS:
         text += (
             f"`{user}`\n"
@@ -787,7 +920,7 @@ def about_command(client, message):
 • 支持视频相册
 • 支持文件下载
 ━━━━━━━━━━━━━━
-⚙️ Powered by Luckyshuo
+⚙️ Powered by LuckyShuo
 💻 「存迹」项目
 
 """,
@@ -798,8 +931,8 @@ def about_command(client, message):
                         "🌐 「存迹」",
                         url=(
                             "https://github.com/"
-                            "fzucs/"
-                            "Save-Restricted-Bot"
+                            "LuckyShuo712/"
+                            "SaveTrace-Bot"
                         ),
                     )
                 ]
@@ -889,7 +1022,7 @@ def approve_handler(client, callback_query):
 """
         )
         callback_query.message.edit_text(
-            "✅ 已授权用户\n"
+            "✅ 已授权用户\n\n"
             f"ID: `{user_id}`"
         )
         
