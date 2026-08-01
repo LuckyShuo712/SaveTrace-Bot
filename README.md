@@ -244,19 +244,6 @@ https://my.telegram.org
 
 ---
 
-## 安全提醒
-
-请勿上传：
-
-```
-config.json
-*.session
-```
-
-这些文件包含 Telegram 登录信息。
-
----
-
 # 🌟 开源协议
 
 本项目仅供学习与研究使用。
